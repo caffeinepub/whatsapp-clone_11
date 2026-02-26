@@ -1,0 +1,121 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "WhatsApp-like messaging app with signup, login, and user search",
+  "requirements": [
+    {
+      "id": "REQ-2",
+      "summary": "Build a signup screen with username/password collection, validation, and backend registration",
+      "acceptanceCriteria": [
+        "Signup form has username and password fields with validation feedback.",
+        "Submitting a valid new username and password creates an account and logs the user in.",
+        "Submitting a taken username shows a clear error message.",
+        "Password field masks input characters."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/SignupPage.tsx",
+          "operation": "create",
+          "description": "Create a signup page component with form fields for username and password. Implement client-side validation (non-empty, minimum length). On form submit, call actor.registerUser(username, password) and handle success (redirect to main app) or error (display inline error for taken username or validation failures). Use shadcn/ui Form components for consistent styling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add a route for /signup that renders SignupPage. Ensure unauthenticated users can access this route. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Build a login screen with username/password authentication and session persistence",
+      "acceptanceCriteria": [
+        "Login form has username and password fields.",
+        "Correct credentials authenticate the user and redirect to the main app.",
+        "Incorrect credentials show an error message.",
+        "Session is persisted so the user is not logged out on page refresh.",
+        "A logged-in user is redirected away from the login page."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/LoginPage.tsx",
+          "operation": "create",
+          "description": "Create a login page component with form fields for username and password. On form submit, call actor.authenticateUser(username, password). On success, persist session state (using localStorage or the authorization component's session mechanism), then redirect to the main app (/home or /). On failure, display a clear error message. Use shadcn/ui Form components for consistent styling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add a route for /login that renders LoginPage. Ensure unauthenticated users can access this route. Add logic to redirect authenticated users away from /login to the main app. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useAuth.ts",
+          "operation": "create",
+          "description": "Create a custom hook to manage authentication state. Integrate with the authorization component to check if a user is logged in. Provide methods for login, logout, and checking authentication status. Use actor.authenticateUser for validation and persist session in localStorage. Expose isAuthenticated boolean and user profile data."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Implement a main/home screen with user search functionality (login-protected)",
+      "acceptanceCriteria": [
+        "Search bar is visible on the main screen after login.",
+        "Typing in the search bar triggers a query and shows matching usernames.",
+        "No results found state is displayed when no users match.",
+        "Clicking a search result navigates to a user detail or placeholder chat view.",
+        "The screen is not accessible without being logged in."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "create",
+          "description": "Create the main home page component accessible only when logged in. Add a search bar at the top using shadcn/ui Input. Implement debounced search that calls actor.searchUsersByPrefix(prefix) as the user types. Display matching usernames in a list below the search bar using shadcn/ui Card components. Show a 'No results found' state when the search returns an empty array. Each search result should be clickable and navigate to a placeholder user detail or chat view (e.g., /user/:username). Guard the component with authentication check using the useAuth hook."
+        },
+        {
+          "path": "frontend/src/pages/UserDetailPage.tsx",
+          "operation": "create",
+          "description": "Create a placeholder user detail or chat page component that displays the selected username. Accept username as a route parameter. For now, display a simple message like 'Chat with [username]' or 'User Profile: [username]'. This satisfies the requirement for clicking a search result to open a view. Use shadcn/ui Card for layout."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add a route for /home (or /) that renders HomePage, protected by authentication (redirect to /login if not authenticated). Add a route for /user/:username that renders UserDetailPage. Ensure navigation flows correctly from search results to user detail page. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/ProtectedRoute.tsx",
+          "operation": "create",
+          "description": "Create a ProtectedRoute wrapper component that checks authentication status using the useAuth hook. If the user is not authenticated, redirect to /login. Use this wrapper for protected routes like /home and /user/:username in App.tsx."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Apply a cohesive dark-themed visual design inspired by modern mobile messaging apps",
+      "acceptanceCriteria": [
+        "All screens share a consistent color palette and typography.",
+        "Primary action buttons use a distinct accent color.",
+        "The layout is clean and readable on both desktop and mobile widths."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Update global styles to implement a dark theme with deep charcoal/dark background (#121212 or similar). Define CSS custom properties for teal/green accent colors (e.g., --accent-primary: #00bfa5) for primary actions. Ensure clean sans-serif typography (system fonts or Inter/Roboto). Apply these styles globally so all pages inherit the dark theme."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind configuration to include the dark theme color palette. Add custom colors for background (charcoal), accent (teal/green), and card backgrounds. Configure typography with clean sans-serif fonts. Ensure responsive utilities are available for mobile and desktop layouts."
+        },
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "create",
+          "description": "Create a Layout component that wraps all pages and applies consistent header/navigation structure. Include the app logo (frontend/public/assets/generated/chatconnect-logo.dim_256x256.png) in the header. Use card-based layouts for user lists and forms. Apply dark background and accent colors for buttons. This component ensures design consistency across signup, login, and main screens."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wrap all routes with the Layout component to apply consistent design across all screens."
+        }
+      ]
+    }
+  ]
+}

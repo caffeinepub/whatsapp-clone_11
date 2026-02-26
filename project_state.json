@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "A WhatsApp-like messaging app where users can sign up and log in with username and password from any device, and search for other users by username.",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- App logo mark — a minimal speech bubble icon with a subtle gradient in teal-green tones on a dark background (chatconnect-logo.dim_256x256.png)",
+  "existing_features": [
+    {
+      "id": "feature-build-a-signup-screen-that-collects-a-username-and-password-validates-inputs-non-empty-minimum-length-and-calls-the-backend-register-function-on-success-redirect-the-user-to-the-main-app-display-inline-error-messages-for-taken-usernames-or-validation-failures",
+      "title": "Build a signup screen that collects a username and password, validates inputs (non-empty, minimum length), and calls the backend register function. On success, redirect the user to the main app. Display inline error messages for taken usernames or validation failures.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-login-screen-that-collects-a-username-and-password-and-calls-the-backend-authenticate-function-on-success-persist-the-session-e-g-localstorage-so-the-user-remains-logged-in-across-page-reloads-and-device-sessions-on-failure-display-a-clear-error-message",
+      "title": "Build a login screen that collects a username and password and calls the backend authenticate function. On success, persist the session (e.g., localStorage) so the user remains logged in across page reloads and device sessions. On failure, display a clear error message.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-main-home-screen-only-accessible-when-logged-in-that-contains-a-search-bar-at-the-top-as-the-user-types-a-username-query-the-backend-for-matching-users-and-display-the-results-in-a-list-showing-each-user-s-username-clicking-a-user-from-the-results-opens-a-placeholder-conversation-profile-view",
+      "title": "Implement a main/home screen (only accessible when logged in) that contains a search bar at the top. As the user types a username, query the backend for matching users and display the results in a list showing each user's username. Clicking a user from the results opens a placeholder conversation/profile view.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-cohesive-dark-themed-visual-design-inspired-by-modern-mobile-messaging-apps-use-a-deep-charcoal-dark-background-with-teal-or-green-accent-colors-for-primary-actions-clean-sans-serif-typography-and-card-based-layouts-for-user-lists-ensure-the-design-is-consistent-across-signup-login-and-main-screens",
+      "title": "Apply a cohesive dark-themed visual design inspired by modern mobile messaging apps. Use a deep charcoal/dark background with teal or green accent colors for primary actions, clean sans-serif typography, and card-based layouts for user lists. Ensure the design is consistent across signup, login, and main screens.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "User signup with username and password",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "User login with username and password from any device",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Search bar to find other users by username",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Implement a backend data model and actor methods for user accounts. Each user account must store a unique username and a hashed password. Provide functions to: register a new user (username + password), authenticate a user (username + password, returning a session token or success indicator), and look up users by username prefix for search.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "WhatsApp-like Messaging App",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

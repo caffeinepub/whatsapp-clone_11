@@ -1,0 +1,21 @@
+{
+  "backend/main.mo": "Motoko actor implementing user registration, authentication, profile management, and username search, with role-based access control via a MixinAuthorization mixin.",
+  "feature_evidence.json": "Feature evidence report mapping implemented features (signup, login, home/search screen, dark theme) to their source files, components, and test IDs.",
+  "frontend-file-summaries.txt": "JSON document containing one-sentence summaries of each frontend source file for quick reference during build planning.",
+  "frontend/index.css": "Tailwind base CSS defining OKLCH-based design tokens for light and dark themes, including background, foreground, primary, and sidebar color variables.",
+  "frontend/index.html": "Minimal HTML entry point that mounts the React app into a root div and loads the main TypeScript module.",
+  "frontend/src/App.tsx": "TanStack Router configuration defining routes for /, /login, /signup, /home, and /user/:username with localStorage-based auth guards redirecting unauthenticated users.",
+  "frontend/src/hooks/useActor.ts": "React Query hook that creates and caches an authenticated or anonymous ICP backend actor based on the current Internet Identity, invalidating dependent queries when the actor changes.",
+  "frontend/src/hooks/useAuth.ts": "Custom hook managing a username/timestamp session persisted in localStorage, exposing saveSession and clearSession helpers.",
+  "frontend/src/hooks/useInternetIdentity.ts": "Internet Identity context provider and hook wrapping DFINITY's AuthClient to manage login, logout, and identity state with configurable options.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks exposing useSearchUsers (query), useRegisterUser (mutation), and useAuthenticateUser (mutation) that call the backend actor methods.",
+  "frontend/src/index.css": "Global CSS file that imports Inter font, sets up Tailwind directives, and defines dark-first CSS custom properties for theming (colors, sidebar, charts) plus a thin scrollbar utility.",
+  "frontend/src/main.tsx": "React app entry point that mounts the app with QueryClientProvider, InternetIdentityProvider, and the root App component.",
+  "frontend/src/pages/HomePage.tsx": "Home page with a debounced user search input, displays search results as clickable user list items, and provides logout and navigation to user profiles.",
+  "frontend/src/pages/LoginPage.tsx": "Login page with username/password form that authenticates via a mutation hook, saves the session, and navigates to home on success.",
+  "frontend/src/pages/SignupPage.tsx": "Signup page with username, password, and confirm-password fields including validation, password strength indicators, and auto-login after successful registration.",
+  "frontend/src/pages/UserDetailPage.tsx": "User profile detail page showing avatar, username, and a disabled 'Message (Coming Soon)' button, with special handling when viewing one's own profile.",
+  "frontend/src/utils/urlParams.ts": "Utility functions for reading, storing, and clearing URL parameters from both query strings and hash-based routing, with sessionStorage persistence support.",
+  "frontend/tailwind.config.js": "Tailwind CSS configuration for the frontend, defining dark mode, custom color tokens using oklch CSS variables, typography, container queries, animation plugins, and custom keyframes/shadows.",
+  "project_state.json": "Project state tracking file describing a WhatsApp-like messaging app, listing existing implemented features (signup, login, home/search screens, dark theme) and pending new feature requests with their requirement IDs and statuses."
+}

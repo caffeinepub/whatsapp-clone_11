@@ -1,0 +1,11 @@
+{
+  "frontend/src/index.css": "Global styles with a dark-first OKLCH color system featuring deep charcoal backgrounds and teal/green primary accent colors, Inter font import, and custom scrollbar utilities.",
+  "frontend/tailwind.config.js": "Extended Tailwind config with Inter font family, custom glow box shadows, additional border radius tokens, and fade/slide-in animations.",
+  "frontend/src/hooks/useAuth.ts": "Custom hook managing username/password session state persisted in localStorage, providing saveSession and clearSession methods.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for backend operations: searchUsersByPrefix (query), registerUser (mutation), and authenticateUser (mutation).",
+  "frontend/src/App.tsx": "TanStack Router setup with routes for /, /login, /signup, /home, and /user/:username, with beforeLoad guards redirecting unauthenticated users to /login.",
+  "frontend/src/pages/LoginPage.tsx": "Login page with username/password form, show/hide password toggle, inline error handling, and auto-redirect on success.",
+  "frontend/src/pages/SignupPage.tsx": "Signup page with username/password/confirm-password form, password strength indicators, validation, and auto-login after successful registration.",
+  "frontend/src/pages/HomePage.tsx": "Protected home page with debounced user search bar, search results list with avatars, empty states, and logout functionality.",
+  "frontend/src/pages/UserDetailPage.tsx": "User profile detail page showing avatar, username, and a placeholder \"Message\" button, accessible via /user/:username route."
+}

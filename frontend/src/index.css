@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+
+    /* Light mode (unused - app is dark-first) */
+    --background: 0.13 0.008 240;
+    --foreground: 0.95 0.005 240;
+    --card: 0.17 0.008 240;
+    --card-foreground: 0.95 0.005 240;
+    --popover: 0.17 0.008 240;
+    --popover-foreground: 0.95 0.005 240;
+    --primary: 0.72 0.17 162;
+    --primary-foreground: 0.08 0.005 240;
+    --secondary: 0.22 0.008 240;
+    --secondary-foreground: 0.85 0.005 240;
+    --muted: 0.22 0.008 240;
+    --muted-foreground: 0.55 0.01 240;
+    --accent: 0.72 0.17 162;
+    --accent-foreground: 0.08 0.005 240;
+    --destructive: 0.62 0.22 25;
+    --destructive-foreground: 0.98 0 0;
+    --border: 0.28 0.008 240;
+    --input: 0.22 0.01 240;
+    --ring: 0.72 0.17 162;
+    --chart-1: 0.72 0.17 162;
+    --chart-2: 0.65 0.15 200;
+    --chart-3: 0.55 0.12 240;
+    --chart-4: 0.75 0.18 140;
+    --chart-5: 0.68 0.16 180;
+    --sidebar: 0.15 0.008 240;
+    --sidebar-foreground: 0.95 0.005 240;
+    --sidebar-primary: 0.72 0.17 162;
+    --sidebar-primary-foreground: 0.08 0.005 240;
+    --sidebar-accent: 0.22 0.008 240;
+    --sidebar-accent-foreground: 0.85 0.005 240;
+    --sidebar-border: 0.28 0.008 240;
+    --sidebar-ring: 0.72 0.17 162;
+  }
+
+  .dark {
+    --background: 0.13 0.008 240;
+    --foreground: 0.95 0.005 240;
+    --card: 0.17 0.008 240;
+    --card-foreground: 0.95 0.005 240;
+    --popover: 0.20 0.008 240;
+    --popover-foreground: 0.95 0.005 240;
+    --primary: 0.72 0.17 162;
+    --primary-foreground: 0.08 0.005 240;
+    --secondary: 0.22 0.008 240;
+    --secondary-foreground: 0.85 0.005 240;
+    --muted: 0.22 0.008 240;
+    --muted-foreground: 0.55 0.01 240;
+    --accent: 0.72 0.17 162;
+    --accent-foreground: 0.08 0.005 240;
+    --destructive: 0.62 0.22 25;
+    --destructive-foreground: 0.98 0 0;
+    --border: 0.28 0.008 240;
+    --input: 0.22 0.01 240;
+    --ring: 0.72 0.17 162;
+    --chart-1: 0.72 0.17 162;
+    --chart-2: 0.65 0.15 200;
+    --chart-3: 0.55 0.12 240;
+    --chart-4: 0.75 0.18 140;
+    --chart-5: 0.68 0.16 180;
+    --sidebar: 0.15 0.008 240;
+    --sidebar-foreground: 0.95 0.005 240;
+    --sidebar-primary: 0.72 0.17 162;
+    --sidebar-primary-foreground: 0.08 0.005 240;
+    --sidebar-accent: 0.22 0.008 240;
+    --sidebar-accent-foreground: 0.85 0.005 240;
+    --sidebar-border: 0.28 0.008 240;
+    --sidebar-ring: 0.72 0.17 162;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.28 0.008 240) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: oklch(0.28 0.008 240);
+    border-radius: 2px;
+  }
+}
