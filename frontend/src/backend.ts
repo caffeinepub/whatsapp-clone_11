@@ -89,6 +89,12 @@ export class ExternalBlob {
         return this;
     }
 }
+export type Time = bigint;
+export interface ProfileData {
+    username: string;
+    registrationTime: Time;
+    profile?: UserProfile;
+}
 export interface UserProfile {
     username: string;
     name: string;
@@ -104,13 +110,14 @@ export interface backendInterface {
     authenticateUser(username: string, password: string): Promise<boolean>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
-    getUserProfile(user: Principal): Promise<UserProfile | null>;
+    getPublicUserProfile(user: Principal): Promise<ProfileData | null>;
+    getUserProfile(user: Principal): Promise<ProfileData | null>;
     isCallerAdmin(): Promise<boolean>;
     registerUser(username: string, password: string): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     searchUsersByPrefix(prefix: string): Promise<Array<string>>;
 }
-import type { UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
+import type { ProfileData as _ProfileData, Time as _Time, UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
     async _initializeAccessControlWithSecret(arg0: string): Promise<void> {
@@ -183,18 +190,32 @@ export class Backend implements backendInterface {
             return from_candid_UserRole_n4(this._uploadFile, this._downloadFile, result);
         }
     }
-    async getUserProfile(arg0: Principal): Promise<UserProfile | null> {
+    async getPublicUserProfile(arg0: Principal): Promise<ProfileData | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getPublicUserProfile(arg0);
+                return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getPublicUserProfile(arg0);
+            return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getUserProfile(arg0: Principal): Promise<ProfileData | null> {
         if (this.processError) {
             try {
                 const result = await this.actor.getUserProfile(arg0);
-                return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+                return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getUserProfile(arg0);
-            return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+            return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
         }
     }
     async isCallerAdmin(): Promise<boolean> {
@@ -254,11 +275,32 @@ export class Backend implements backendInterface {
         }
     }
 }
+function from_candid_ProfileData_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _ProfileData): ProfileData {
+    return from_candid_record_n8(_uploadFile, _downloadFile, value);
+}
 function from_candid_UserRole_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserRole): UserRole {
     return from_candid_variant_n5(_uploadFile, _downloadFile, value);
 }
 function from_candid_opt_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
     return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_ProfileData]): ProfileData | null {
+    return value.length === 0 ? null : from_candid_ProfileData_n7(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_record_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    username: string;
+    registrationTime: _Time;
+    profile: [] | [_UserProfile];
+}): {
+    username: string;
+    registrationTime: Time;
+    profile?: UserProfile;
+} {
+    return {
+        username: value.username,
+        registrationTime: value.registrationTime,
+        profile: record_opt_to_undefined(from_candid_opt_n3(_uploadFile, _downloadFile, value.profile))
+    };
 }
 function from_candid_variant_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     admin: null;

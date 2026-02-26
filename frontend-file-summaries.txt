@@ -2,10 +2,10 @@
   "frontend/src/index.css": "Global styles with a dark-first OKLCH color system featuring deep charcoal backgrounds and teal/green primary accent colors, Inter font import, and custom scrollbar utilities.",
   "frontend/tailwind.config.js": "Extended Tailwind config with Inter font family, custom glow box shadows, additional border radius tokens, and fade/slide-in animations.",
   "frontend/src/hooks/useAuth.ts": "Custom hook managing username/password session state persisted in localStorage, providing saveSession and clearSession methods.",
-  "frontend/src/hooks/useQueries.ts": "React Query hooks for backend operations: searchUsersByPrefix (query), registerUser (mutation), and authenticateUser (mutation).",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for backend operations; `useRegisterUser` and `useAuthenticateUser` mutations now normalize the username with `.trim().toLowerCase()` before calling the backend, and `useSearchUsers` also lowercases the prefix for consistent case-insensitive matching.",
   "frontend/src/App.tsx": "TanStack Router setup with routes for /, /login, /signup, /home, and /user/:username, with beforeLoad guards redirecting unauthenticated users to /login.",
   "frontend/src/pages/LoginPage.tsx": "Login page with username/password form, show/hide password toggle, inline error handling, and auto-redirect on success.",
-  "frontend/src/pages/SignupPage.tsx": "Signup page with username/password/confirm-password form, password strength indicators, validation, and auto-login after successful registration.",
+  "frontend/src/pages/SignupPage.tsx": "Signup page with username/password/confirm-password form, password strength indicators, and validation; now normalizes the username to trimmed lowercase before submission and auto-login, with improved error message detection covering both \"already taken\" and \"already registered\" backend error strings.",
   "frontend/src/pages/HomePage.tsx": "Protected home page with debounced user search bar, search results list with avatars, empty states, and logout functionality.",
-  "frontend/src/pages/UserDetailPage.tsx": "User profile detail page showing avatar, username, and a placeholder \"Message\" button, accessible via /user/:username route."
+  "frontend/src/pages/UserDetailPage.tsx": "User profile detail page that displays full profile information including username, display name, account status, and last login date; shows a loading skeleton while fetching own profile data, an error state if the fetch fails, and uses labeled info rows with teal/green accent icons consistent with the app's dark theme."
 }

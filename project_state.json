@@ -1,11 +1,12 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
+  "projectStateVersion": 7,
   "summary": "A WhatsApp-like messaging app where users can sign up and log in with username and password from any device, and search for other users by username.",
   "architectural_notes": [],
-  "known_issues": [],
-  "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- App logo mark — a minimal speech bubble icon with a subtle gradient in teal-green tones on a dark background (chatconnect-logo.dim_256x256.png)",
+  "known_issues": [
+    "Signup incorrectly returns 'username already taken' error even for unique usernames — suspected case sensitivity mismatch or comparison bug in the register function"
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-build-a-signup-screen-that-collects-a-username-and-password-validates-inputs-non-empty-minimum-length-and-calls-the-backend-register-function-on-success-redirect-the-user-to-the-main-app-display-inline-error-messages-for-taken-usernames-or-validation-failures",
@@ -38,6 +39,30 @@
         "REQ-5"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-the-usequeries-hook-to-add-a-usegetuserprofile-react-query-hook-that-calls-the-backend-getuserprofile-function-with-a-given-username-and-returns-the-full-profile-data",
+      "title": "Update the useQueries hook to add a useGetUserProfile React Query hook that calls the backend getUserProfile function with a given username and returns the full profile data.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-redesign-the-userdetailpage-user-username-to-display-all-available-user-profile-information-returned-by-the-backend-show-fields-such-as-username-member-since-date-registration-timestamp-and-any-other-available-attributes-in-a-well-structured-profile-card-replace-the-current-placeholder-layout-with-real-data-fetched-via-usegetuserprofile-maintain-the-existing-dark-themed-design-with-teal-green-accents",
+      "title": "Redesign the UserDetailPage (/user/:username) to display all available user profile information returned by the backend. Show fields such as username, member since date/registration timestamp, and any other available attributes in a well-structured profile card. Replace the current placeholder layout with real data fetched via useGetUserProfile. Maintain the existing dark-themed design with teal/green accents.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-signup-page-frontend-to-ensure-that-the-username-value-sent-to-the-backend-register-function-is-normalized-to-lowercase-trimmed-of-leading-trailing-whitespace-and-lowercased-before-submission-so-the-stored-username-is-always-in-a-consistent-canonical-form",
+      "title": "Update the signup page frontend to ensure that the username value sent to the backend register function is normalized to lowercase (trimmed of leading/trailing whitespace and lowercased) before submission, so the stored username is always in a consistent canonical form.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -64,6 +89,28 @@
       "summary": "Implement a backend data model and actor methods for user accounts. Each user account must store a unique username and a hashed password. Provide functions to: register a new user (username + password), authenticate a user (username + password, returning a session token or success indicator), and look up users by username prefix for search.",
       "reqIds": [
         "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Show all information about a user (profile view with full user details)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Extend the backend to expose a getUserProfile function that returns all available stored information for a given username, including at minimum: username, registration timestamp, and any other fields present on the user record.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Fix the backend register function so that username uniqueness checks are performed in a case-insensitive manner. Normalize both the stored usernames and the incoming username to lowercase (or a consistent canonical form) before comparison, so that a genuinely unique username is never incorrectly rejected with a 'username already taken' error.",
+      "reqIds": [
+        "REQ-9"
       ],
       "status": "pending"
     }

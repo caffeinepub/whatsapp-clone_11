@@ -17,6 +17,12 @@ export const UserProfile = IDL.Record({
   'username' : IDL.Text,
   'name' : IDL.Text,
 });
+export const Time = IDL.Int;
+export const ProfileData = IDL.Record({
+  'username' : IDL.Text,
+  'registrationTime' : Time,
+  'profile' : IDL.Opt(UserProfile),
+});
 
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
@@ -24,9 +30,14 @@ export const idlService = IDL.Service({
   'authenticateUser' : IDL.Func([IDL.Text, IDL.Text], [IDL.Bool], []),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getPublicUserProfile' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(ProfileData)],
+      ['query'],
+    ),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
-      [IDL.Opt(UserProfile)],
+      [IDL.Opt(ProfileData)],
       ['query'],
     ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
@@ -44,6 +55,12 @@ export const idlFactory = ({ IDL }) => {
     'guest' : IDL.Null,
   });
   const UserProfile = IDL.Record({ 'username' : IDL.Text, 'name' : IDL.Text });
+  const Time = IDL.Int;
+  const ProfileData = IDL.Record({
+    'username' : IDL.Text,
+    'registrationTime' : Time,
+    'profile' : IDL.Opt(UserProfile),
+  });
   
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
@@ -51,9 +68,14 @@ export const idlFactory = ({ IDL }) => {
     'authenticateUser' : IDL.Func([IDL.Text, IDL.Text], [IDL.Bool], []),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getPublicUserProfile' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(ProfileData)],
+        ['query'],
+      ),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
-        [IDL.Opt(UserProfile)],
+        [IDL.Opt(ProfileData)],
         ['query'],
       ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),

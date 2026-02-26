@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-build-a-signup-screen-that-collects-a-username-and-password-validates-inputs-non-empty-minimum-length-and-calls-the-backend-register-function-on-success-redirect-the-user-to-the-main-app-display-inline-error-messages-for-taken-usernames-or-validation-failures",
-      "featureTitle": "Build a signup screen that collects a username and password, validates inputs (non-empty, minimum length), and calls the backend register function. On success, redirect the user to the main app. Display inline error messages for taken usernames or validation failures.",
+      "featureId": "feature-update-the-signup-page-frontend-to-ensure-that-the-username-value-sent-to-the-backend-register-function-is-normalized-to-lowercase-trimmed-of-leading-trailing-whitespace-and-lowercased-before-submission-so-the-stored-username-is-always-in-a-consistent-canonical-form",
+      "featureTitle": "Update the signup page frontend to ensure that the username value sent to the backend register function is normalized to lowercase (trimmed of leading/trailing whitespace and lowercased) before submission, so the stored username is always in a consistent canonical form.",
       "files": [
-        "frontend/src/App.tsx",
+        "frontend/src/hooks/useQueries.ts",
         "frontend/src/pages/SignupPage.tsx"
       ],
       "components": [
@@ -17,70 +17,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-build-a-login-screen-that-collects-a-username-and-password-and-calls-the-backend-authenticate-function-on-success-persist-the-session-e-g-localstorage-so-the-user-remains-logged-in-across-page-reloads-and-device-sessions-on-failure-display-a-clear-error-message",
-      "featureTitle": "Build a login screen that collects a username and password and calls the backend authenticate function. On success, persist the session (e.g., localStorage) so the user remains logged in across page reloads and device sessions. On failure, display a clear error message.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/hooks/useAuth.ts",
-        "frontend/src/pages/LoginPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-3"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-a-main-home-screen-only-accessible-when-logged-in-that-contains-a-search-bar-at-the-top-as-the-user-types-a-username-query-the-backend-for-matching-users-and-display-the-results-in-a-list-showing-each-user-s-username-clicking-a-user-from-the-results-opens-a-placeholder-conversation-profile-view",
-      "featureTitle": "Implement a main/home screen (only accessible when logged in) that contains a search bar at the top. As the user types a username, query the backend for matching users and display the results in a list showing each user's username. Clicking a user from the results opens a placeholder conversation/profile view.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/pages/HomePage.tsx",
-        "frontend/src/pages/UserDetailPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-4"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-apply-a-cohesive-dark-themed-visual-design-inspired-by-modern-mobile-messaging-apps-use-a-deep-charcoal-dark-background-with-teal-or-green-accent-colors-for-primary-actions-clean-sans-serif-typography-and-card-based-layouts-for-user-lists-ensure-the-design-is-consistent-across-signup-login-and-main-screens",
-      "featureTitle": "Apply a cohesive dark-themed visual design inspired by modern mobile messaging apps. Use a deep charcoal/dark background with teal or green accent colors for primary actions, clean sans-serif typography, and card-based layouts for user lists. Ensure the design is consistent across signup, login, and main screens.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/index.css",
-        "frontend/tailwind.config.js"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-5"
+        "REQ-10"
       ],
       "confidence": "high"
     }

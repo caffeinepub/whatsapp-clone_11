@@ -47,10 +47,11 @@ export default function SignupPage() {
   const authenticateMutation = useAuthenticateUser();
 
   const validateUsername = (val: string) => {
-    if (!val.trim()) return 'Username is required';
-    if (val.trim().length < 3) return 'Username must be at least 3 characters';
-    if (val.trim().length > 30) return 'Username must be at most 30 characters';
-    if (!/^[a-zA-Z0-9_.-]+$/.test(val.trim())) return 'Username can only contain letters, numbers, _, ., -';
+    const trimmed = val.trim();
+    if (!trimmed) return 'Username is required';
+    if (trimmed.length < 3) return 'Username must be at least 3 characters';
+    if (trimmed.length > 30) return 'Username must be at most 30 characters';
+    if (!/^[a-zA-Z0-9_.-]+$/.test(trimmed)) return 'Username can only contain letters, numbers, _, ., -';
     return '';
   };
 
@@ -75,17 +76,23 @@ export default function SignupPage() {
       return;
     }
 
+    // Normalize username: trim and lowercase before submission
+    const normalizedUsername = username.trim().toLowerCase();
+
     try {
-      await registerMutation.mutateAsync({ username: username.trim(), password });
-      // Auto-login after registration
-      const success = await authenticateMutation.mutateAsync({ username: username.trim(), password });
+      await registerMutation.mutateAsync({ username: normalizedUsername, password });
+      // Auto-login after registration using the same normalized username
+      const success = await authenticateMutation.mutateAsync({ username: normalizedUsername, password });
       if (success) {
-        saveSession(username.trim());
+        saveSession(normalizedUsername);
         navigate({ to: '/home' });
       }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
-      if (message.includes('already registered')) {
+      if (
+        message.toLowerCase().includes('already taken') ||
+        message.toLowerCase().includes('already registered')
+      ) {
         setError('This username is already taken. Please choose another.');
       } else {
         setError('Registration failed. Please try again.');
@@ -137,7 +144,7 @@ export default function SignupPage() {
                 autoFocus
                 className="bg-input border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-primary h-11"
               />
-              <p className="text-xs text-muted-foreground">Letters, numbers, _, ., - only</p>
+              <p className="text-xs text-muted-foreground">Letters, numbers, _, ., - only (case-insensitive)</p>
             </div>
 
             <div className="space-y-1.5">

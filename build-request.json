@@ -1,121 +1,57 @@
 {
   "kind": "build_request",
-  "title": "WhatsApp-like messaging app with signup, login, and user search",
-  "projectName": "ChatConnect",
-  "priority": "normal",
+  "title": "Fix false 'username already taken' error on signup",
+  "priority": "high",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Implement a backend data model and actor methods for user accounts. Each user account must store a unique username and a hashed password. Provide functions to: register a new user (username + password), authenticate a user (username + password, returning a session token or success indicator), and look up users by username prefix for search.",
+      "id": "REQ-9",
+      "text": "Fix the backend register function so that username uniqueness checks are performed in a case-insensitive manner. Normalize both the stored usernames and the incoming username to lowercase (or a consistent canonical form) before comparison, so that a genuinely unique username is never incorrectly rejected with a 'username already taken' error.",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-recent"
         ],
         "quotes": [
-          "user need to signup with username and password and after he login with username and password from any device",
-          "search people by username"
+          "In signup i am filling a unique name that not taken anyone but still username is already taken problem arisen"
         ]
       },
       "acceptanceCriteria": [
-        "A new user can register with a unique username and password.",
-        "Attempting to register with an already-taken username returns an error.",
-        "A registered user can log in with the correct username and password.",
-        "Logging in with an incorrect password returns an authentication error.",
-        "A backend query accepts a username string and returns matching user profiles."
+        "Registering a brand-new username that has never been used returns a success response, not a 'username already taken' error.",
+        "Username uniqueness comparison is case-insensitive — e.g., 'Alice' and 'alice' are treated as the same username.",
+        "Attempting to register a username that genuinely already exists (same canonical form) still correctly returns a 'username already taken' error.",
+        "Existing registered users are unaffected and can still log in after the fix."
       ]
     },
     {
-      "id": "REQ-2",
-      "text": "Build a signup screen that collects a username and password, validates inputs (non-empty, minimum length), and calls the backend register function. On success, redirect the user to the main app. Display inline error messages for taken usernames or validation failures.",
+      "id": "REQ-10",
+      "text": "Update the signup page frontend to ensure that the username value sent to the backend register function is normalized to lowercase (trimmed of leading/trailing whitespace and lowercased) before submission, so the stored username is always in a consistent canonical form.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-recent"
         ],
         "quotes": [
-          "user need to signup with username and password"
+          "In signup i am filling a unique name that not taken anyone but still username is already taken problem arisen"
         ]
       },
       "acceptanceCriteria": [
-        "Signup form has username and password fields with validation feedback.",
-        "Submitting a valid new username and password creates an account and logs the user in.",
-        "Submitting a taken username shows a clear error message.",
-        "Password field masks input characters."
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Build a login screen that collects a username and password and calls the backend authenticate function. On success, persist the session (e.g., localStorage) so the user remains logged in across page reloads and device sessions. On failure, display a clear error message.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "after he login with username and password from any device"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Login form has username and password fields.",
-        "Correct credentials authenticate the user and redirect to the main app.",
-        "Incorrect credentials show an error message.",
-        "Session is persisted so the user is not logged out on page refresh.",
-        "A logged-in user is redirected away from the login page."
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Implement a main/home screen (only accessible when logged in) that contains a search bar at the top. As the user types a username, query the backend for matching users and display the results in a list showing each user's username. Clicking a user from the results opens a placeholder conversation/profile view.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "app have a search bar that user search people by username"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Search bar is visible on the main screen after login.",
-        "Typing in the search bar triggers a query and shows matching usernames.",
-        "No results found state is displayed when no users match.",
-        "Clicking a search result navigates to a user detail or placeholder chat view.",
-        "The screen is not accessible without being logged in."
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Apply a cohesive dark-themed visual design inspired by modern mobile messaging apps. Use a deep charcoal/dark background with teal or green accent colors for primary actions, clean sans-serif typography, and card-based layouts for user lists. Ensure the design is consistent across signup, login, and main screens.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ]
-      },
-      "acceptanceCriteria": [
-        "All screens share a consistent color palette and typography.",
-        "Primary action buttons use a distinct accent color.",
-        "The layout is clean and readable on both desktop and mobile widths."
+        "The username submitted to the backend during signup is trimmed and lowercased.",
+        "The signup form still validates that the username is non-empty after trimming.",
+        "Error messages for truly taken usernames remain visible; no false-positive 'username already taken' errors appear for unique usernames."
       ]
     }
   ],
   "constraints": [
-    "All backend logic must reside in a single Motoko actor in backend/main.mo.",
-    "Do not use Internet Identity for authentication — use username and password only.",
-    "Do not edit any files listed under frontend.immutablePaths."
+    "Do not change the existing user data schema or break backward compatibility for already-registered users.",
+    "Do not modify any files listed in frontend.immutablePaths."
   ],
   "nonGoals": [
-    "Real-time messaging or WebSockets.",
-    "Media/file sharing.",
-    "Group chats.",
-    "Push notifications.",
-    "Email verification or password reset flow."
+    "Adding new profile fields or changing the registration flow beyond the username normalization fix.",
+    "Changing password hashing or authentication logic.",
+    "UI redesign of the signup page beyond fixing the error handling."
   ],
   "imageRequirements": {
-    "required": [
-      "App logo mark — a minimal speech bubble icon with a subtle gradient in teal-green tones on a dark background (chatconnect-logo.dim_256x256.png)"
-    ],
+    "required": [],
     "edits": []
   }
 }

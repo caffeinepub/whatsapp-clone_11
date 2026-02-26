@@ -10,6 +10,12 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface ProfileData {
+  'username' : string,
+  'registrationTime' : Time,
+  'profile' : [] | [UserProfile],
+}
+export type Time = bigint;
 export interface UserProfile { 'username' : string, 'name' : string }
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
@@ -20,7 +26,8 @@ export interface _SERVICE {
   'authenticateUser' : ActorMethod<[string, string], boolean>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
-  'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'getPublicUserProfile' : ActorMethod<[Principal], [] | [ProfileData]>,
+  'getUserProfile' : ActorMethod<[Principal], [] | [ProfileData]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'registerUser' : ActorMethod<[string, string], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,

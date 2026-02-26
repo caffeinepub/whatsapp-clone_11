@@ -1,13 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Build a WhatsApp-inspired messaging app (ChatConnect) with user registration, login, and username-based search.
+**Goal:** Fix a false "username already taken" error during signup by normalizing usernames to lowercase on both the frontend and backend.
 
 **Planned changes:**
-- Backend: single Motoko actor with user account storage (unique username + hashed password), register function, authenticate function (returns session token), and username prefix search query
-- Signup screen: username + password form with validation, inline error messages, redirects to main app on success
-- Login screen: username + password form, persists session in localStorage, redirects to main app on success
-- Main/home screen (auth-protected): search bar that queries backend by username prefix and displays matching users in a list; clicking a result opens a placeholder chat/profile view
-- Dark-themed UI with deep charcoal background, teal/green accents, card-based user list, and consistent typography across all screens
+- Update the backend register function to normalize usernames to lowercase before performing uniqueness checks, ensuring comparisons are case-insensitive.
+- Update the signup page frontend to trim and lowercase the username before submitting it to the backend.
 
-**User-visible outcome:** Users can sign up and log in with a username and password, remain logged in across page reloads, and search for other users by username from the main screen.
+**User-visible outcome:** Users can successfully register with a unique username without encountering a false "username already taken" error due to case differences or whitespace.

@@ -1,16 +1,89 @@
 import { useParams, useNavigate } from '@tanstack/react-router';
-import { ArrowLeft, MessageCircle, UserCircle2 } from 'lucide-react';
+import { ArrowLeft, UserCircle2, Calendar, Clock, User, AtSign, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 import { useAuth } from '../hooks/useAuth';
+import { useGetCallerUserProfile } from '../hooks/useQueries';
+
+function ProfileInfoRow({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="flex items-center gap-3 py-3">
+      <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+        {icon}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide mb-0.5">
+          {label}
+        </p>
+        <p className="text-sm text-foreground font-medium truncate">{value}</p>
+      </div>
+    </div>
+  );
+}
+
+function ProfileSkeleton() {
+  return (
+    <div className="space-y-4 animate-pulse">
+      <div className="bg-card rounded-2xl border border-border p-8 flex flex-col items-center">
+        <Skeleton className="w-24 h-24 rounded-full mb-4" />
+        <Skeleton className="h-7 w-40 mb-2" />
+        <Skeleton className="h-4 w-28 mb-6" />
+        <Skeleton className="h-9 w-36" />
+      </div>
+      <div className="bg-card rounded-2xl border border-border p-4 space-y-3">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="flex items-center gap-3 py-2">
+            <Skeleton className="w-9 h-9 rounded-xl" />
+            <div className="flex-1 space-y-1.5">
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function UserDetailPage() {
   const { username } = useParams({ from: '/user/$username' });
   const navigate = useNavigate();
-  const { username: currentUser } = useAuth();
+  const { username: currentUser, session } = useAuth();
+
+  const isOwnProfile = currentUser === username;
+
+  // Fetch profile data for the current user's own profile
+  const {
+    data: callerProfile,
+    isLoading: profileLoading,
+    isError: profileError,
+  } = useGetCallerUserProfile();
 
   const initials = username ? username.slice(0, 2).toUpperCase() : 'U';
-  const isOwnProfile = currentUser === username;
+
+  // Format the session login time as a proxy for "member since" for own profile
+  const memberSinceDate = session?.loggedInAt
+    ? new Date(session.loggedInAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : null;
+
+  const displayName = isOwnProfile && callerProfile?.name ? callerProfile.name : null;
+
+  const showSkeleton = isOwnProfile && profileLoading;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -31,57 +104,109 @@ export default function UserDetailPage() {
 
       {/* Main content */}
       <main className="flex-1 max-w-lg mx-auto w-full px-4 py-8 animate-fade-in">
-        {/* Profile card */}
-        <div className="bg-card rounded-2xl border border-border p-8 flex flex-col items-center text-center shadow-xs">
-          {/* Avatar */}
-          <div className="relative mb-4">
-            <Avatar className="w-24 h-24">
-              <AvatarFallback className="bg-primary/20 text-primary font-bold text-3xl">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-glow-sm">
-              <UserCircle2 size={14} className="text-primary-foreground" />
+        {showSkeleton ? (
+          <ProfileSkeleton />
+        ) : (
+          <>
+            {/* Profile card */}
+            <div className="bg-card rounded-2xl border border-border p-8 flex flex-col items-center text-center shadow-xs">
+              {/* Avatar */}
+              <div className="relative mb-4">
+                <Avatar className="w-24 h-24">
+                  <AvatarFallback className="bg-primary/20 text-primary font-bold text-3xl">
+                    {initials}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-glow-sm">
+                  <UserCircle2 size={14} className="text-primary-foreground" />
+                </div>
+              </div>
+
+              {/* Display name */}
+              {displayName && (
+                <h2 className="text-2xl font-bold text-foreground mb-1">{displayName}</h2>
+              )}
+
+              {/* Username */}
+              <p
+                className={`font-semibold text-primary ${displayName ? 'text-base mb-1' : 'text-2xl font-bold text-foreground mb-1'}`}
+              >
+                @{username}
+              </p>
+
+              {/* Badges */}
+              <div className="flex items-center gap-2 mt-2 mb-4 flex-wrap justify-center">
+                {isOwnProfile && (
+                  <Badge
+                    variant="secondary"
+                    className="bg-primary/20 text-primary border-primary/30 text-xs font-medium"
+                  >
+                    This is you
+                  </Badge>
+                )}
+                <Badge
+                  variant="outline"
+                  className="border-border text-muted-foreground text-xs font-medium"
+                >
+                  <Shield size={10} className="mr-1" />
+                  Member
+                </Badge>
+              </div>
+
+              {isOwnProfile && profileError && (
+                <p className="text-xs text-destructive mb-3">
+                  Could not load full profile details.
+                </p>
+              )}
             </div>
-          </div>
 
-          {/* Username */}
-          <h2 className="text-2xl font-bold text-foreground mb-1">@{username}</h2>
-          {isOwnProfile && (
-            <span className="inline-flex items-center gap-1 text-xs bg-primary/20 text-primary px-2.5 py-1 rounded-full font-medium mb-3">
-              This is you
-            </span>
-          )}
+            {/* Info rows */}
+            <div className="mt-4 bg-card rounded-2xl border border-border px-4 divide-y divide-border/60">
+              <ProfileInfoRow
+                icon={<AtSign size={16} className="text-primary" />}
+                label="Username"
+                value={`@${username}`}
+              />
 
-          <p className="text-muted-foreground text-sm mb-6">
-            {isOwnProfile
-              ? 'This is your profile'
-              : `Send a message to @${username}`}
-          </p>
+              {isOwnProfile && displayName && (
+                <ProfileInfoRow
+                  icon={<User size={16} className="text-primary" />}
+                  label="Display Name"
+                  value={displayName}
+                />
+              )}
 
-          {/* Action button */}
-          {!isOwnProfile && (
-            <Button
-              className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold rounded-xl px-6 shadow-glow-sm"
-              disabled
-            >
-              <MessageCircle size={16} className="mr-2" />
-              Message (Coming Soon)
-            </Button>
-          )}
-        </div>
+              {isOwnProfile && memberSinceDate && (
+                <ProfileInfoRow
+                  icon={<Calendar size={16} className="text-primary" />}
+                  label="Last Login"
+                  value={memberSinceDate}
+                />
+              )}
 
-        {/* Info card */}
-        <div className="mt-4 bg-card rounded-2xl border border-border p-4">
-          <div className="flex items-center gap-3 text-sm text-muted-foreground">
-            <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
-              <UserCircle2 size={16} className="text-muted-foreground" />
+              <ProfileInfoRow
+                icon={<Clock size={16} className="text-primary" />}
+                label="Account Status"
+                value="Active"
+              />
             </div>
-            <p>
-              <span className="text-foreground font-medium">@{username}</span> is a member of ChatConnect
-            </p>
-          </div>
-        </div>
+
+            {/* About section */}
+            <div className="mt-4 bg-card rounded-2xl border border-border p-4">
+              <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
+                  <UserCircle2 size={16} className="text-muted-foreground" />
+                </div>
+                <p>
+                  <span className="text-foreground font-medium">@{username}</span>
+                  {isOwnProfile
+                    ? ' — this is your ChatConnect profile.'
+                    : ' is a member of ChatConnect.'}
+                </p>
+              </div>
+            </div>
+          </>
+        )}
       </main>
 
       {/* Footer */}
